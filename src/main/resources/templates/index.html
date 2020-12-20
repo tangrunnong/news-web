@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<link rel="stylesheet" type="text/css" href="static/layui/css/layui.css" media="all"/>
+<script type="text/javascript" src="static/layui/layui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.js"></script>
+<script src="static/js/axios.min.js"></script>
+<body>
+<!-- 注意：(item,key,index)位置不能改变，否则内容显示出错！ -->
+<div id="app">
+    <div class="layui-tab" style="height: 400px;width: 1000px">
+        <ul class="layui-tab-title">
+            <li class="layui-this" style="background-color: #f74c4c;color: #fff;">组织工作</li>
+            <li>干部工作</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-row layui-col-space15">
+                    <div class="layui-col-md6">
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <img :src="firstNews.coverUrl"
+                                     style="width: 115px;height: 75px"/>
+                            </div>
+                            <div class="layui-col-md8">
+                                <h5>{{firstNews.newsTitle}}</h5>
+                                <span class="title2">{{firstNews.newsContent}}</span>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <ul>
+                                <li class="list_item" v-for="(item, i) in news">
+                                    <div class="fields pr_fields">
+                                        <span class="Article_Index">●</span>
+                                        <span class="Article_Title">{{item.newsTitle}}</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="layui-col-md6">
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <img :src="firstNews.coverUrl"
+                                     style="width: 115px;height: 75px"/>
+                            </div>
+                            <div class="layui-col-md8">
+                                <h5>{{firstNews.newsTitle}}</h5>
+                                <span class="title2">{{firstNews.newsContent}}</span>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <ul>
+                                <li class="list_item" v-for="(item, i) in news">
+                                    <div class="fields pr_fields">
+                                        <span class="Article_Index">●</span>
+                                        <span class="Article_Title">{{item.newsTitle}}</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="layui-tab-item">内容2</div>
+        </div>
+    </div>
+
+</div>
+<script>
+    let vue = new Vue({
+        el: '#app',
+        data() {
+            return {
+                firstNews: {},
+                news: {}
+            }
+        },
+        methods: {
+            loadData() {
+                axios.post('/news/main').then(function (response) {
+                    console.log(response.data);
+                    vue.news = response.data[0].newsList
+                    vue.firstNews=response.data[0].newsList[0]
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            }
+        }
+    })
+    vue.loadData()
+
+    //我们强烈推荐你在代码最外层把需要用到的模块先加载
+    layui.use(['element'], function () {
+    });
+
+</script>
+
+<style>
+    .title2 {
+        color: #9F9F9F;
+    }
+
+    ol, ul, li {
+        list-style: none;
+    }
+
+    .list_item {
+        width: 100%;
+        height: 30px;
+        line-height: 30px;
+        vertical-align: top;
+    }
+</style>
+</body>
+</html>
